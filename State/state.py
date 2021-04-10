@@ -1,5 +1,6 @@
 from abc import abstractmethod,ABC
 
+
 class State(ABC):
     def __init__(self):
         self.runDisplay = True

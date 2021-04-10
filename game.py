@@ -14,6 +14,23 @@ class Game():
         self.window = pygame.display.set_mode( (self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT) )
         self.menuState = Menu(self)
         self.currentState = self.menuState
+        self.fontSRC = "Font/GODOFWAR.TTF"
+        self.COLORS = {
+            "white":(255,255,255),
+            "black":(0,0,0),
+            "red":(255,0,0),
+            "green":(0,255,0),
+            "blue":(0,0,255)
+        }
+    # Narzedzia do obslugi gry
+    def DrawText(self, text, size, x, y, color):
+        # TODO: Domyslny kolor ustawić na biały
+        font = pygame.font.Font(self.fontSRC, size)
+        textSurface = font.render(text, True, color)
+        textRect = textSurface.get_rect()
+        textRect.center = ( x, y )
+        self.display.blit(textSurface,textRect)
+    # Obsluga klasy Game
     def InitGameSettings(self):
         pygame.display.set_caption("Nasza gra z Creative Club")
     def Update(self):
