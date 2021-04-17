@@ -14,7 +14,7 @@ class Game():
         self.window = pygame.display.set_mode( (self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT) )
         self.menuState = Menu(self)
         self.currentState = self.menuState
-        self.fontSRC = "Font/GODOFWAR.TTF"
+        self.fontSRC = "Font/BIGSPACE.TTF"
         self.COLORS = {
             "white":(255,255,255),
             "black":(0,0,0),
@@ -22,6 +22,10 @@ class Game():
             "green":(0,255,0),
             "blue":(0,0,255)
         }
+        # NEW ELEMENTS:
+        self.bg = pygame.image.load("img/wallpaper.jpg")
+        self.bg = pygame.transform.scale(self.bg,(self.DISPLAY_WIDTH,self.DISPLAY_HEIGHT))
+        self.bgRect = self.bg.get_rect()
     # Narzedzia do obslugi gry
     def DrawText(self, text, size, x, y, color):
         # TODO: Domyslny kolor ustawić na biały
