@@ -1,5 +1,6 @@
 import pygame
 from State.MenuStates.menu import Menu
+from State.EditorState.editor import Editor
 
 class Game():
     # Konstruktor klasy Game:
@@ -13,14 +14,17 @@ class Game():
         self.display = pygame.Surface( (self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT) )
         self.window = pygame.display.set_mode( (self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT) )
         self.menuState = Menu(self)
-        self.currentState = self.menuState
+        self.editorState = Editor(self)
+        #self.currentState = self.menuState
+        self.currentState = self.editorState
         self.fontSRC = "Font/BIGSPACE.TTF"
         self.COLORS = {
             "white":(255,255,255),
             "black":(0,0,0),
             "red":(255,0,0),
             "green":(0,255,0),
-            "blue":(0,0,255)
+            "blue":(0,0,255),
+            "gray":(163,163,163)
         }
         # NEW ELEMENTS:
         self.bg = pygame.image.load("img/wallpaper.jpg")

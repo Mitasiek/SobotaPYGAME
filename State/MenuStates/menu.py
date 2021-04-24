@@ -66,10 +66,18 @@ class Menu(State):
                 self.cursor_rect.midtop = (self.mid_w - 50, self.credits_h)
                 self.menuState = "Credits"
             self.keyUp = False
+    def ResetKeys(self):
+        self.keyDown = False
+        self.keyUp = False
+        self.keyEnter = False
     def CheckInput(self):
         if (self.keyEnter):
             print("Klawisz Enter został wcisnięty")
             print(f'State: {self.menuState}')
+            if (self.menuState == "Exit"):
+                print("Koniec programu.")
+                self.runDisplay = False
+                self.game.start = False
     def UpdateEvents(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -79,7 +87,7 @@ class Menu(State):
                 #Lista obslugiwanych klawiszy
                 if event.key == pygame.K_RETURN:
                     self.keyEnter = True
-                    self.CheckInput()
+                    #self.CheckInput()
                 if event.key == pygame.K_BACKSPACE:
                     print("Cofamy się")
                 if event.key == pygame.K_DOWN:
@@ -90,6 +98,8 @@ class Menu(State):
                     self.MoveCursor()
     def Update(self):
         self.UpdateEvents()
+        self.CheckInput()
+        self.ResetKeys()
         pygame.display.update()
     def Render(self):
         self.game.display.fill(self.game.COLORS["red"])
