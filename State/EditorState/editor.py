@@ -1,6 +1,6 @@
 from State.state import State
 import pygame
-
+# Nowe elementy: tlo, animacja tla, przewijanie, tick Clocka, Nowe rzeczy konstruktor
 class Editor(State):
     def __init__(self,game):
         super().__init__(game)
@@ -16,20 +16,24 @@ class Editor(State):
         self.keyBackspace = False
         self.cloudImage = pygame.image.load('./Sprites/Background/sky_cloud.png').convert_alpha()
         self.skyImage = pygame.image.load('./Sprites/Background/sky.png').convert_alpha()
-        self.skyRect = self.skyImage.get_rect()
+        #self.skyRect = self.skyImage.get_rect()
         self.mountainImage = pygame.image.load('./Sprites/Background/mountain2.png').convert_alpha()
-        self.mountainRect = self.mountainImage.get_rect()
+        #self.mountainRect = self.mountainImage.get_rect()
         self.pineForestImg1 = pygame.image.load('./Sprites/Background/pine2.png').convert_alpha()
-        self.pineRect1 = self.pineForestImg1.get_rect()
+        #self.pineRect1 = self.pineForestImg1.get_rect()
         self.pineForestImg2 = pygame.image.load('./Sprites/Background/pine1.png').convert_alpha()
-        self.pineRect2 = self.pineForestImg2.get_rect()
-
+        #self.pineRect2 = self.pineForestImg2.get_rect()
+        self.TILE_COUNT = 16
+    def InitTiles(self):
+        self.imgList = []
+        for x in range(self.TILE_COUNT):
+            img = pygame.image.load('./Sprites/Tiles')
     def ResetKeys(self):
         self.keyBackspace = False
     def CheckInput(self):
         if (self.keyBackspace):
             print("Backspace")
-        if (self.scrollLeft):
+        if (self.scrollLeft and self.scroll > 0):
             self.scroll -= 5 * self.scrollSpeed
         if (self.scrollRight):
             self.scroll += 5 * self.scrollSpeed
@@ -58,12 +62,16 @@ class Editor(State):
         self.ResetKeys()
         pygame.display.update()
     def DrawBg(self):
+        # ZMIANY
         self.game.display.fill(self.game.COLORS["gray"])
-        self.game.display.blit(self.cloudImage, self.cloudImage.get_rect())
-        self.game.display.blit(self.skyImage, (self.skyRect.x, self.skyRect.y + 200))
-        self.game.display.blit(self.mountainImage, (self.mountainRect.x, self.mountainRect.y + 250))
-        self.game.display.blit(self.pineForestImg1, (self.pineRect1.x, self.pineRect1.y + 300))
-        self.game.display.blit(self.pineForestImg2, (self.pineRect2.x, self.pineRect1.y + 350))
+        width = self.skyImage.get_width()
+        for x in range(4):
+            self.game.display.blit(self.cloudImage, ((x * width)-self.scroll * 0.5,0))
+            self.game.display.blit(self.skyImage, ((x * width)-self.scroll * 0.6, self.game.DISPLAY_HEIGHT - self.skyImage.get_height() - 250))
+            self.game.display.blit(self.mountainImage,((x * width)-self.scroll * 0.7, self.game.DISPLAY_HEIGHT - self.mountainImage.get_height() - 250))
+            self.game.display.blit(self.pineForestImg2, ((x * width)-self.scroll * 0.8,self.game.DISPLAY_HEIGHT - self.pineForestImg2.get_height() - 180))
+            self.game.display.blit(self.pineForestImg1, ((x * width)-self.scroll * 0.9,self.game.DISPLAY_HEIGHT - self.pineForestImg2.get_height() - 150))
+
     def DrawGrid(self):
         for i in range(self.COLS):
             pygame.draw.line(self.game.display,self.game.COLORS["white"],(i * self.TILESIZE - self.scroll,0),(i*self.TILESIZE - self.scroll,self.game.DISPLAY_HEIGHT- self.LOWERMARGIN))
@@ -82,3 +90,5 @@ class Editor(State):
         while self.runDisplay:
             self.Update()
             self.Render()
+            # ZEGAR
+            self.game.clock.tick( self.game.FPS )

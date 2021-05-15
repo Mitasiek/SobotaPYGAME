@@ -1,6 +1,6 @@
 from State.state import State
 import pygame
-# TODO: SKALOWANIE ZDJECIA MENU, inne staty, przeskiwanie statow, wczytanie tla
+# TODO: Przelaczanie statow, inne staty, przeskiwanie statow, wczytanie tla
 class Menu(State):
     def __init__(self,game):
         super().__init__(game)
