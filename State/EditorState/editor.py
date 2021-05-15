@@ -11,6 +11,7 @@ class Editor(State):
         self.ROWS = (self.game.DISPLAY_WIDTH - self.SIDEMARGIN) // self.TILESIZE
         self.scrollLeft = False
         self.scrollRight = False
+        self.leftShift = False
         self.scroll = 0
         self.scrollSpeed = 1
         self.keyBackspace = False
@@ -24,19 +25,31 @@ class Editor(State):
         self.pineForestImg2 = pygame.image.load('./Sprites/Background/pine1.png').convert_alpha()
         #self.pineRect2 = self.pineForestImg2.get_rect()
         self.TILE_COUNT = 16
+        self.InitTiles()
     def InitTiles(self):
         self.imgList = []
-        for x in range(self.TILE_COUNT):
-            img = pygame.image.load('./Sprites/Tiles')
+        for x in range(5):
+            img = pygame.image.load(f'Sprites/Tiles/grass_{x+1}.png')
+            img = pygame.transform.scale(img,(self.TILESIZE,self.TILESIZE))
+            self.imgList.append(img)
+        for x in range(11):
+            img = pygame.image.load(f'Sprites/Tiles/ground_{x+1}.png')
+            img = pygame.transform.scale(img, (self.TILESIZE, self.TILESIZE))
+            self.imgList.append(img)
+        print(self.imgList)
     def ResetKeys(self):
         self.keyBackspace = False
     def CheckInput(self):
         if (self.keyBackspace):
             print("Backspace")
-        if (self.scrollLeft and self.scroll > 0):
+        if (self.scrollLeft and self.scroll > 10):
             self.scroll -= 5 * self.scrollSpeed
         if (self.scrollRight):
             self.scroll += 5 * self.scrollSpeed
+        if (self.leftShift):
+            self.scrollSpeed = 5
+        if (self.leftShift == False):
+            self.scrollSpeed = 1
 
     def UpdateEvents(self):
         for event in pygame.event.get():
@@ -51,11 +64,15 @@ class Editor(State):
                     self.scrollLeft = True
                 if event.key == pygame.K_RIGHT:
                     self.scrollRight = True
+                if event.key == pygame.K_LSHIFT:
+                    self.leftShift = True
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
                     self.scrollLeft = False
                 if event.key == pygame.K_RIGHT:
                     self.scrollRight = False
+                if event.key == pygame.K_LSHIFT:
+                    self.leftShift = False
     def Update(self):
         self.UpdateEvents()
         self.CheckInput()
@@ -77,6 +94,8 @@ class Editor(State):
             pygame.draw.line(self.game.display,self.game.COLORS["white"],(i * self.TILESIZE - self.scroll,0),(i*self.TILESIZE - self.scroll,self.game.DISPLAY_HEIGHT- self.LOWERMARGIN))
         for i in range(self.ROWS):
             pygame.draw.line(self.game.display,self.game.COLORS["white"],(0,i * self.TILESIZE),(self.game.DISPLAY_WIDTH - self.SIDEMARGIN,i * self.TILESIZE))
+    def InitButtons(self):
+        pass
     def DrawEditorPanel(self):
         pygame.draw.rect(self.game.display,self.game.COLORS['black'],(self.game.DISPLAY_WIDTH - self.SIDEMARGIN,0,self.SIDEMARGIN,self.game.DISPLAY_HEIGHT + self.LOWERMARGIN))
         pygame.draw.rect(self.game.display,self.game.COLORS["black"],(0,self.game.DISPLAY_HEIGHT - self.LOWERMARGIN,self.game.DISPLAY_WIDTH,self.game.DISPLAY_HEIGHT - self.LOWERMARGIN))
