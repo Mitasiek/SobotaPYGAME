@@ -1,5 +1,4 @@
 from State.state import State
-# Nowe podpiecia:
 from Components.button import Button
 import pygame
 import csv
@@ -42,7 +41,7 @@ class Editor(State):
         # INIT
         #self.InitTiles() # TODO: Przeniesc to
         #self.InitWorldData()
-    def InitTiles(self): # ZMIENIC NAZWE NA INIT IMG
+    def InitImg(self): # ZMIENIC NAZWE NA INIT IMG
         self.saveButtonImg = pygame.image.load('img/saveButton.png').convert_alpha()
         self.loadButtonImg = pygame.image.load('img/loadButton.png').convert_alpha()
         self.imgList = []
@@ -55,7 +54,6 @@ class Editor(State):
             img = pygame.transform.scale(img, (self.TILESIZE, self.TILESIZE))
             self.imgList.append(img)
         print(self.imgList)
-    # NOWE FUNKCJA:
     def InitWorldData(self):
         for row in range(self.ROWS):
             r = [-1] * self.COLS
@@ -65,17 +63,22 @@ class Editor(State):
         buttonCol = 0
         buttonRow = 0
         for i in range(len(self.imgList)):
-            tileButton = Button(self.game.DISPLAY_WIDTH - self.SIDEMARGIN + (75 * buttonCol) + 50, 75 * buttonRow + 50, self.imgList[i],1)
-
+            tileButton = Button(
+                self.game.DISPLAY_WIDTH - self.SIDEMARGIN + (40 * buttonCol) + 30,
+                40 * buttonRow + 30,
+                self.imgList[i],
+                1
+            )
             self.buttonList.append(tileButton)
             buttonCol += 1
-            if buttonCol == 2:
+            if buttonCol == 3:
                 buttonRow += 1
                 buttonCol = 0
         self.saveButton = Button(0.02 * self.game.DISPLAY_WIDTH, self.game.DISPLAY_HEIGHT - self.LOWERMARGIN + 40, self.saveButtonImg, 0.35)
         self.loadButton = Button(0.02 * self.game.DISPLAY_WIDTH + 75, self.game.DISPLAY_HEIGHT - self.LOWERMARGIN + 40, self.loadButtonImg, 0.35)
+        print(self.buttonList)
     def InitEditorSettings(self):
-        self.InitTiles()
+        self.InitImg()
         self.InitWorldData()
         self.InitButtons()
     def CheckMouseMotion(self):
@@ -138,7 +141,6 @@ class Editor(State):
     def Update(self):
         self.UpdateEvents()
         self.CheckInput()
-        # NOWE
         self.CheckMouseMotion()
         self.CheckTileArea()
         # TODO: ZROBIC NOWA FUNKCJE DO OBSLUGI CSV:
@@ -161,7 +163,6 @@ class Editor(State):
         self.ResetKeys()
         pygame.display.update()
     def DrawBg(self):
-        # ZMIANY
         self.game.display.fill(self.game.COLORS["gray"])
         width = self.skyImage.get_width()
         for x in range(4):
@@ -175,7 +176,6 @@ class Editor(State):
             pygame.draw.line(self.game.display,self.game.COLORS["white"],(i * self.TILESIZE - self.scroll,0),(i*self.TILESIZE - self.scroll,self.game.DISPLAY_HEIGHT- self.LOWERMARGIN))
         for i in range(self.ROWS):
             pygame.draw.line(self.game.display,self.game.COLORS["white"],(0,i * self.TILESIZE),(self.game.DISPLAY_WIDTH - self.SIDEMARGIN,i * self.TILESIZE))
-    # NOWE
     def DrawWorld(self):
         for y, row in enumerate(self.worldData):
             for x, tile in enumerate(row):
@@ -186,7 +186,6 @@ class Editor(State):
     def DrawEditorPanel(self):
         pygame.draw.rect(self.game.display,self.game.COLORS['black'],(self.game.DISPLAY_WIDTH - self.SIDEMARGIN,0,self.SIDEMARGIN,self.game.DISPLAY_HEIGHT + self.LOWERMARGIN))
         pygame.draw.rect(self.game.display,self.game.COLORS["black"],(0,self.game.DISPLAY_HEIGHT - self.LOWERMARGIN,self.game.DISPLAY_WIDTH,self.game.DISPLAY_HEIGHT - self.LOWERMARGIN))
-        #buttonCount = 0
         for buttonCount, i in enumerate(self.buttonList):
             if i.Draw(self.game.display):
                 self.currentTile = buttonCount
@@ -200,13 +199,14 @@ class Editor(State):
     def Render(self):
         self.DrawBg()
         self.DrawGrid()
-        # NOWE
         self.DrawWorld()
         self.DrawEditorPanel()
         self.BlitScreen()
     def DisplayState(self):
         print("Jestem w edytorze.")
-        self.InitEditorSettings()
+        if (self.init == True):
+            self.InitEditorSettings()
+            self.init = False
         while self.runDisplay:
             self.Update()
             self.Render()
