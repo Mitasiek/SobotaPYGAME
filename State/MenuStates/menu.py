@@ -1,4 +1,5 @@
 from State.state import State
+from State.EditorState.editor import Editor
 import pygame
 # TODO: Przelaczanie statow, inne staty, przeskiwanie statow, wczytanie tla
 class Menu(State):
@@ -42,6 +43,7 @@ class Menu(State):
             elif (self.menuState == "Editor"):
                 self.cursor_rect.midtop = (self.mid_w - 50, self.credits_h)
                 self.menuState = "Credits"
+
             elif (self.menuState == "Credits"):
                 self.cursor_rect.midtop = (self.mid_w - 70, self.exit_h)
                 self.menuState = "Exit"
@@ -78,6 +80,9 @@ class Menu(State):
                 print("Koniec programu.")
                 self.runDisplay = False
                 self.game.start = False
+            if (self.menuState == "Editor"):
+                self.runDisplay = False
+                self.game.AddState(Editor(self.game))
     def UpdateEvents(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

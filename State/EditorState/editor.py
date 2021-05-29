@@ -96,7 +96,7 @@ class Editor(State):
                     print(" NIE OK ")
         print(self.mousePosX)
         print(self.mousePosY)
-    # KONIEC NOWYCH
+
     def ResetKeys(self):
         self.keyBackspace = False
     def CheckInput(self):
@@ -110,7 +110,12 @@ class Editor(State):
             self.scrollSpeed = 5
         if (self.leftShift == False):
             self.scrollSpeed = 1
-
+    def CheckButtons(self):
+        if self.saveButton.Draw(self.game.display):
+            self.game.fileManager.SaveWorldToFile(f'level{self.level}_data.csv', self.worldData)
+        if self.loadButton.Draw(self.game.display):
+            self.scroll = 0
+            self.game.fileManager.LoadWorldFromFile(f'level{self.level}_data.csv', self.worldData)
     def UpdateEvents(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -126,7 +131,6 @@ class Editor(State):
                     self.scrollRight = True
                 if event.key == pygame.K_LSHIFT:
                     self.leftShift = True
-                # NOWE
                 if event.key == pygame.K_UP:
                     self.level += 1
                 if event.key == pygame.K_DOWN and self.level > 0:
@@ -144,22 +148,7 @@ class Editor(State):
         self.CheckMouseMotion()
         self.CheckTileArea()
         # TODO: ZROBIC NOWA FUNKCJE DO OBSLUGI CSV:
-
-        if self.saveButton.Draw(self.game.display):
-            # save level data
-            with open(f'level{self.level}_data.csv', 'w', newline='') as csvfile:
-                writer = csv.writer(csvfile, delimiter=',')
-                for row in self.worldData:
-                    writer.writerow(row)
-        if self.loadButton.Draw(self.game.display):
-            # load in level data
-            # reset scrol lback to teh start of the level
-            self.scroll = 0
-            with open(f'level{self.level}_data.csv', newline='') as csvfile:
-                reader = csv.reader(csvfile, delimiter=',')
-                for x, row in enumerate(reader):
-                    for y, tile in enumerate(row):
-                        self.worldData[x][y] = int(tile)
+        self.CheckButtons()
         self.ResetKeys()
         pygame.display.update()
     def DrawBg(self):

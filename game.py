@@ -1,6 +1,7 @@
 import pygame
 from State.MenuStates.menu import Menu
 from State.EditorState.editor import Editor
+from FileClass.manageFile import ManageFile
 
 class Game():
     # Konstruktor klasy Game:
@@ -13,10 +14,11 @@ class Game():
         self.start = True
         self.display = pygame.Surface( (self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT) )
         self.window = pygame.display.set_mode( (self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT) )
-        self.menuState = Menu(self)
-        self.editorState = Editor(self)
+        #self.menuState = Menu(self)
+        #self.editorState = Editor(self)
         #self.currentState = self.menuState
-        self.currentState = self.editorState
+        self.stateList = []
+        self.AddState(Menu(self))
         self.fontSRC = "Font/BIGSPACE.TTF"
         self.COLORS = {
             "white":(255,255,255),
@@ -30,6 +32,7 @@ class Game():
         self.bg = pygame.image.load("img/wallpaper.jpg")
         self.bg = pygame.transform.scale(self.bg,(self.DISPLAY_WIDTH,self.DISPLAY_HEIGHT))
         self.bgRect = self.bg.get_rect()
+        self.fileManager = ManageFile()
     # Narzedzia do obslugi gry
     def DrawText(self, text, size, x, y, color):
         # TODO: Domyslny kolor ustawić na biały
@@ -41,6 +44,12 @@ class Game():
     # Obsluga klasy Game
     def InitGameSettings(self):
         pygame.display.set_caption("Nasza gra z Creative Club")
+    def AddState(self, state):
+        self.stateList.append(state)
+        self.currentState = self.stateList[len(self.stateList) - 1]
+    def RemoveState(self):
+        self.stateList.remove(len(self.stateList) - 1)
+        self.currentState = self.stateList[len(self.stateList) - 1]
     def Update(self):
         pygame.display.update()
     def Render(self):
