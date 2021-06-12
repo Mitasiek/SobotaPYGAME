@@ -1,5 +1,6 @@
 from State.state import State
 from State.EditorState.editor import Editor
+from State.gameState.gameState import GameState
 import pygame
 # TODO: Przelaczanie statow, inne staty, przeskiwanie statow, wczytanie tla
 class Menu(State):
@@ -83,6 +84,9 @@ class Menu(State):
             if (self.menuState == "Editor"):
                 self.runDisplay = False
                 self.game.AddState(Editor(self.game))
+            if (self.menuState == "Start"):
+                self.runDisplay=False
+                self.game.AddState(GameState(self.game))
     def UpdateEvents(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -113,6 +117,7 @@ class Menu(State):
         self.BlitScreen()
     def DisplayState(self):
         print("Jestem w menu gry.")
+        self.runDisplay=True
         while self.runDisplay:
             self.Update()
             self.Render()

@@ -48,7 +48,7 @@ class Game():
         self.stateList.append(state)
         self.currentState = self.stateList[len(self.stateList) - 1]
     def RemoveState(self):
-        self.stateList.remove(len(self.stateList) - 1)
+        self.stateList.pop(len(self.stateList) - 1)
         self.currentState = self.stateList[len(self.stateList) - 1]
     def Update(self):
         pygame.display.update()

@@ -101,7 +101,9 @@ class Editor(State):
         self.keyBackspace = False
     def CheckInput(self):
         if (self.keyBackspace):
-            print("Backspace")
+            print("backspace")
+            self.game.RemoveState()
+            self.runDisplay=False
         if (self.scrollLeft and self.scroll > 10):
             self.scroll -= 5 * self.scrollSpeed
         if (self.scrollRight):
