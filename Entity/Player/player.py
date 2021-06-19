@@ -31,6 +31,7 @@ class Player(Entity):
             self.directionX=1
             self.flip=False
         if leftMove==True:
+            #c
             self.deltaX=-self.speed
             self.directionX=-1
             self.flip=True
