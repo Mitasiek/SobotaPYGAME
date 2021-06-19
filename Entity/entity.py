@@ -8,7 +8,8 @@ class Entity(ABC):
         self.positionY=y
         self.imgRectangle = self.image.get_rect()
         self.image=pygame.transform.scale(self.image,(self.imgRectangle.width*scale,self.imgRectangle.height*scale))
-
+        self.imgRectangle.x=self.positionX
+        self.imgRectangle.y=self.positionY
     @abstractmethod
     def Draw(self):
         pass

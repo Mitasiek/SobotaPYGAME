@@ -24,7 +24,17 @@ class GameState (State):
                 if event.key == pygame.K_LEFT:
                     self.KEY_LEFT=True
                 if event.key == pygame.K_RIGHT:
-                        self.KEY_RIGHT = True
+                    self.KEY_RIGHT = True
+                if event.key==pygame.K_SPACE:
+                    self.player.jump=True
+            if event.type == pygame.KEYUP:
+                if event.key==pygame.K_RIGHT:
+                    self.KEY_RIGHT=False
+                    print("puszczony prawy")
+                if event.key==pygame.K_LEFT:
+                    self.KEY_LEFT=False
+                    print("puszczony lewy")
+
 
     def CheckInputs(self):
         if (self.KEY_LEFT):
@@ -34,11 +44,13 @@ class GameState (State):
 
 
     def ResetKeys(self):
-        self.KEY_LEFT=False
-        self.KEY_RIGHT=False
+        pass
+        #self.KEY_LEFT=False
+        #self.KEY_RIGHT=False
 
     def Update(self):
         self.UpdateEvents()
+        self.player.Move(self.KEY_RIGHT,self.KEY_LEFT)
         self.CheckInputs()
 
 
@@ -54,4 +66,5 @@ class GameState (State):
         while self.runDisplay:
             self.Update()
             self.Render()
+            self.game.clock.tick(self.game.FPS)
 
